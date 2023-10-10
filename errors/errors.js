@@ -33,3 +33,7 @@ export let notFound = {
         message: "Not found"
     }
 };
+
+export let errorServerDB = {
+    message: 'Error width database'
+};
