@@ -1,11 +1,12 @@
 import { Router } from "express";
-import hotelsController from "../controllers/hotels.controller";
+import hotelsController from "../controllers/hotels.controller.js";
+import jwt from "../middleware/jwt.js";
 
 const hotels = Router();
 
-hotels.post("/hotel", hotelsController.addRoom);
-hotels.get("/hotels", hotelsController.getAllRooms);
-hotels.delete("/hotel/:id", hotelsController.deleteRoom);
-hotels.get("/hotel/:id/room/:idroom", hotelsController.getRoomInHotel);
+hotels.post("/hotel", jwt.check, hotelsController.addRoom);
+hotels.get("/hotels", jwt.check, hotelsController.getAllRooms);
+hotels.delete("/hotel/:id", jwt.check, hotelsController.deleteRoom);
+hotels.get("/hotel/:id/room/:idroom", jwt.check, hotelsController.getRoomInHotel);
 
 export default hotels;

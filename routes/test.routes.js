@@ -1,5 +1,6 @@
 import { Router } from "express";
 import testController from "../controllers/test.controller.js";
+import jwt from "../middleware/jwt.js";
 
 const test = Router();
 

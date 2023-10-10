@@ -5,7 +5,7 @@ class Rooms {
 
     }
     getRooms(req, res) {
-
+        res.json("Hello");
     }
     deleteRoom(req, res) {
         const { id } = req.params;
