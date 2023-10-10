@@ -1,9 +1,9 @@
 import db from "../db.js";
-import { noneLoginOrPass } from "../errors/errors.js";
+import { noneLoginOrPass, errorServerDB } from "../errors/errors.js";
 
 class Auth {
 
-    async signup(req, res) {
+    signup(req, res) {
 
         let { username, password } = req.body;
         if (!(username && password)) { 
@@ -11,8 +11,20 @@ class Auth {
             return null;
         }
 
-        console.log(">> SIGNUP");
-        res.json("sign")
+        let fieldQuery = [username, password];
+        let sqlQuery = "INSERT INTO users (username, password) VALUES (?, ?);";
+        let funQuery = (errDB, resDB, fielsDB) => {
+
+            if(errDB) {
+                console.log(errDB);
+                res.status(500).json(errorServerDB);
+                return null;
+            }
+
+            res.json(resDB);
+        }
+
+        db.query(sqlQuery, fieldQuery, funQuery);
 
     }
 
@@ -24,8 +36,20 @@ class Auth {
             return null;
         }
 
-        console.log(">> login");
-        res.json("login")
+        let fieldQuery = [username, password];
+        let sqlQuery = "SELECT * FROM users WHERE username = ? AND password = ?;";
+        let funQuery = (errDB, resDB, fielsDB) => {
+
+            if(errDB) {
+                console.log(errDB);
+                res.status(500).json(errorServerDB);
+                return null;
+            }
+
+            res.json(resDB);
+        }
+
+        db.query(sqlQuery, fieldQuery, funQuery);
     }
 
 }
