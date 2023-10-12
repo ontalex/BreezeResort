@@ -2,14 +2,14 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Oct 09, 2023 at 05:29 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.9
+-- Хост: 127.0.0.1:3306
+-- Время создания: Окт 12 2023 г., 09:43
+-- Версия сервера: 8.0.30
+-- Версия PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+03:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `BreezeResort`
+-- База данных: `breezeresort`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clients`
+-- Структура таблицы `clients`
 --
 
 CREATE TABLE `clients` (
@@ -39,7 +39,7 @@ CREATE TABLE `clients` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hotels`
+-- Структура таблицы `hotels`
 --
 
 CREATE TABLE `hotels` (
@@ -51,7 +51,7 @@ CREATE TABLE `hotels` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Структура таблицы `rooms`
 --
 
 CREATE TABLE `rooms` (
@@ -64,98 +64,96 @@ CREATE TABLE `rooms` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Структура таблицы `users`
 --
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
   `username` varchar(120) NOT NULL,
-  `password` varchar(120) NOT NULL
+  `password` varchar(120) NOT NULL,
+  `idhotel` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'ontalex', '123465');
-
---
--- Indexes for dumped tables
+-- Индексы сохранённых таблиц
 --
 
 --
--- Indexes for table `clients`
+-- Индексы таблицы `clients`
 --
 ALTER TABLE `clients`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `client_phone_unique` (`phone`),
-  ADD KEY `rooms_client_key` (`id_childata`);
+  ADD KEY `id_childata` (`id_childata`);
 
 --
--- Indexes for table `hotels`
+-- Индексы таблицы `hotels`
 --
 ALTER TABLE `hotels`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `hotels_name_unique` (`name`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `rooms`
+-- Индексы таблицы `rooms`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `hotels_rooms_key` (`idhotel`);
+  ADD KEY `idhotel` (`idhotel`);
 
 --
--- Indexes for table `users`
+-- Индексы таблицы `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username_Unique` (`username`);
+  ADD KEY `idhotel` (`idhotel`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT для сохранённых таблиц
 --
 
 --
--- AUTO_INCREMENT for table `clients`
+-- AUTO_INCREMENT для таблицы `clients`
 --
 ALTER TABLE `clients`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `hotels`
+-- AUTO_INCREMENT для таблицы `hotels`
 --
 ALTER TABLE `hotels`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `rooms`
+-- AUTO_INCREMENT для таблицы `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
--- Constraints for table `clients`
+-- Ограничения внешнего ключа таблицы `clients`
 --
 ALTER TABLE `clients`
-  ADD CONSTRAINT `rooms_client_key` FOREIGN KEY (`id_childata`) REFERENCES `rooms` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`id_childata`) REFERENCES `rooms` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints for table `rooms`
+-- Ограничения внешнего ключа таблицы `rooms`
 --
 ALTER TABLE `rooms`
-  ADD CONSTRAINT `hotels_rooms_key` FOREIGN KEY (`idhotel`) REFERENCES `hotels` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`idhotel`) REFERENCES `hotels` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ограничения внешнего ключа таблицы `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`idhotel`) REFERENCES `hotels` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
