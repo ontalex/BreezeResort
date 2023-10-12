@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 12 2023 г., 09:43
+-- Время создания: Окт 12 2023 г., 11:06
 -- Версия сервера: 8.0.30
--- Версия PHP: 7.2.34
+-- Версия PHP: 8.1.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+03:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -18,7 +18,7 @@ SET time_zone = "+03:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `breezeresort`
+-- База данных: `BreezeResort`
 --
 
 -- --------------------------------------------------------
@@ -48,6 +48,14 @@ CREATE TABLE `hotels` (
   `number` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Дамп данных таблицы `hotels`
+--
+
+INSERT INTO `hotels` (`id`, `name`, `number`) VALUES
+(1, 'Главный-ЮГ', 321),
+(2, 'Главный-Север', 322);
+
 -- --------------------------------------------------------
 
 --
@@ -73,6 +81,14 @@ CREATE TABLE `users` (
   `password` varchar(120) NOT NULL,
   `idhotel` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `idhotel`) VALUES
+(1, 'Ontalex', '123qwe', 1),
+(2, 'Lex', '123qwe', 2);
 
 --
 -- Индексы сохранённых таблиц
@@ -119,7 +135,7 @@ ALTER TABLE `clients`
 -- AUTO_INCREMENT для таблицы `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `rooms`
@@ -131,7 +147,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
