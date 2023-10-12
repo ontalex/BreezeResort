@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB } from "../errors/errors.js";
+import { errorServerDB, notFound } from "../errors/errors.js";
 
 class Rooms {
     addRoom(req, res) {
@@ -98,13 +98,17 @@ class Rooms {
                 return null;
             }
 
-            console.log([resDB.affectedRows]);
 
-            res.json({
-                data: {
-                    message: "Deleted"
-                }
-            });
+            if (resDB.affectedRows == 1) {
+                res.json({
+                    data: {
+                        message: "Deleted"
+                    }
+                });
+            } else {
+                res.status(403).json(notFound);
+            }
+            
         }
 
         db.query(sqlQuery, fieldQuery, funQuery);
