@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB } from "../errors/errors.js";
+import { errorServerDB, invalid, notFound } from "../errors/errors.js";
 
 class Clients {
 
@@ -24,20 +24,29 @@ class Clients {
             return null;
         }
 
+
+
         let fieldQuery = [fio, email, phone, id_childata, birth_date];
         let sqlQuery = "INSERT INTO clients (fio, email, phone, id_childata, birth_date) VALUES (?, ?, ?, ?, ?);";
         let funQuery = (errDB, resDB) => {
 
             console.log(">>> ERROR DB", errDB);
 
-            if (errDB) {
+            if (errDB && errDB.errno == 1452) {
+                console.log(errDB);
+                res.status(403).json(notFound);
+                return null;
+            } else if (errDB && errDB.errno == 1062) {
+                console.log(errDB);
+                res.status(403).json(invalid("duplicate", "Client already registered"));
+                return null;
+            } else if (errDB) {
                 console.log(errDB);
                 res.status(500).json(errorServerDB);
                 return null;
             }
 
-
-            res.json({
+            res.status(201).json({
                 data: {
                     message: "Created"
                 }
@@ -112,7 +121,7 @@ class Clients {
 
 
             if (resDB.affectedRows == 1) {
-                res.json({
+                res.status(204).json({
                     data: {
                         message: "Deleted"
                     }
@@ -126,14 +135,66 @@ class Clients {
 
     }
 
-    getRegisteredUser(req, res) {
-        let {id, iduser} = req.params;
+    patchRegisteredUser(req, res) {
+        let { id, iduser } = req.params;
 
-        
+        // создать параметры запроса
+        let fieldQuery = [id, iduser];
+        // создать строку запроса
+        let sqlQuery = "UPDATE clients SET clients.id_childata = ? WHERE clients.id = ?;";
+        // создать обработчик
+        let funQuery = (errDB, resDB) => {
+            console.log(">>> ERROR DB", errDB);
+            console.log(">>> RES DB", resDB);
+
+            if (errDB) {
+                console.log(errDB);
+                res.status(403).json(notFound);
+                return null;
+            }
+
+            if (resDB.affectedRows == 1) {
+                res.status(200).json({
+                    data: {
+                        message: "Changed"
+                    }
+                });
+            } else {
+                res.status(403).json(notFound);
+            }
+        }
+        // создать исполнителя
+        db.query(sqlQuery, fieldQuery, funQuery);
     }
 
-    getAllRoom(req, res) {
+    getAllInRoom(req, res) {
+        let sqlQuery = "SELECT rooms.name, clients.fio, clients.phone as phonenamber FROM rooms JOIN clients ON rooms.id = clients.id_childata;";
+        let funQuery = (errDB, resDB) => {
 
+            if (errDB) {
+                console.log(">>> ERROR DB", errDB);
+                res.status(403).json(notFound);
+                return null;
+            }
+
+            if (resDB.length == 0) {
+                res.status(403).json(notFound);
+                return null;
+            } else {
+                
+                const output = Object.entries(resDB.reduce((acc, item) => {
+                    const { name, ...rest } = item;
+                    acc[name] = acc[name] || { name: name, data: [] };
+                    acc[name].data.push(rest);
+                    return acc;
+                }, {})).map(([name, data]) => (data));
+
+                res.json(output);
+            }
+
+        }
+
+        db.query(sqlQuery, funQuery);
     }
 
 }
