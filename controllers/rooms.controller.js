@@ -100,7 +100,7 @@ class Rooms {
 
 
             if (resDB.affectedRows == 1) {
-                res.json({
+                res.status(204).json({
                     data: {
                         message: "Deleted"
                     }
