@@ -162,13 +162,8 @@ class Hotels {
                 return null;
             } else {
 
-                console.log('>> resDB ', resDB);
-
-
                 const output = Object.entries(resDB.reduce((acc, item) => {
                     const { title, number, ...rest } = item;
-
-                    console.log('>> TITLE >>', title || "none");
 
                     acc[title] = acc[title] || { title: title, number: number, data_children: [] };
                     acc[title].data_children.push(rest);
@@ -176,34 +171,19 @@ class Hotels {
                     return acc;
                 }, {})).map(([title, data_children]) => {
 
-                    console.log('>> title ....', data_children.title);
-                    console.log('>> number ....', data_children.number);
-                    console.log('>> data_children ....', data_children);
-
-
                     let outputNext = Object.entries(data_children["data_children"].reduce((accNext, itemNext) => {
                         const { name, ...restNext } = itemNext;
 
-                        console.log('>> NAME >>', name || "none");
-
-                        if (name == null) {
-                            console.log('FOUND IS NULL --------------');
-                            
-                            return accNext
-                        }
+                        if (name == null) return accNext;
 
                         accNext[name] = accNext[name] || { name: name, userdata: [] };
 
-                        if(restNext.fio == null) {
-                            return accNext;        
-                        }
+                        if(restNext.fio == null) return accNext;
                         
                         accNext[name].userdata.push(restNext);
 
                         return accNext;
                     }, {})).map(([name, userdata]) => (userdata));
-
-                    console.log('>> outputNext >>', outputNext);
 
                     return { title: data_children.title, number: data_children.number, data_children: outputNext };
 
