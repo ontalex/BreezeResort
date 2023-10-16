@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { invalid, notFound } from "../errors/errors.js";
+import { errorServerDB, invalid, notFound } from "../errors/errors.js";
 
 class Hotels {
     addRoom(req, res) {
@@ -148,7 +148,73 @@ class Hotels {
     }
 
     getRoomsInHotels(req, res) {
+        let sqlQuery = 'SELECT  hotels.name as title, hotels.number, rooms.name, clients.fio, clients.phone as phonenumber  FROM hotels  LEFT JOIN rooms ON hotels.id = rooms.idhotel  LEFT JOIN clients ON rooms.id = clients.id_childata;';
+        let funQuery = (errDB, resDB) => {
 
+            if (errDB) {
+                console.log(">>> ERROR DB", errDB);
+                res.status(403).json(notFound);
+                return null;
+            }
+
+            if (resDB.length == 0) {
+                res.status(403).json(notFound);
+                return null;
+            } else {
+
+                console.log('>> resDB ', resDB);
+
+
+                const output = Object.entries(resDB.reduce((acc, item) => {
+                    const { title, number, ...rest } = item;
+
+                    console.log('>> TITLE >>', title || "none");
+
+                    acc[title] = acc[title] || { title: title, number: number, data_children: [] };
+                    acc[title].data_children.push(rest);
+
+                    return acc;
+                }, {})).map(([title, data_children]) => {
+
+                    console.log('>> title ....', data_children.title);
+                    console.log('>> number ....', data_children.number);
+                    console.log('>> data_children ....', data_children);
+
+
+                    let outputNext = Object.entries(data_children["data_children"].reduce((accNext, itemNext) => {
+                        const { name, ...restNext } = itemNext;
+
+                        console.log('>> NAME >>', name || "none");
+
+                        if (name == null) {
+                            console.log('FOUND IS NULL --------------');
+                            
+                            return accNext
+                        }
+
+                        accNext[name] = accNext[name] || { name: name, userdata: [] };
+
+                        if(restNext.fio == null) {
+                            return accNext;        
+                        }
+                        
+                        accNext[name].userdata.push(restNext);
+
+                        return accNext;
+                    }, {})).map(([name, userdata]) => (userdata));
+
+                    console.log('>> outputNext >>', outputNext);
+
+                    return { title: data_children.title, number: data_children.number, data_children: outputNext };
+
+                }, []);
+
+                res.json(output);
+            }
+
+        };
+
+        db.query(sqlQuery, funQuery);
     }
 
 }
