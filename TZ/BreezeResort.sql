@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 16 2023 г., 12:44
+-- Время создания: Окт 16 2023 г., 15:45
 -- Версия сервера: 8.0.30
--- Версия PHP: 7.2.34
+-- Версия PHP: 8.0.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,6 +35,16 @@ CREATE TABLE `clients` (
   `birth_date` date DEFAULT NULL,
   `id_childata` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Дамп данных таблицы `clients`
+--
+
+INSERT INTO `clients` (`id`, `fio`, `email`, `phone`, `birth_date`, `id_childata`) VALUES
+(1, 'Maxim Petrov Olegovich', 'grach@wsr.ru', '89001234510', '2000-02-20', 2),
+(3, 'Alex Petrov Olegovich', 'ontaelx@wsr.ru', '89001444510', '2000-02-20', 2),
+(4, 'Grach Petrov Olegovich', 'grac@wsr.ru', '89001444910', '2000-02-20', 3),
+(5, 'Liza Petrova Olegovna', 'lizaPO@wsr.ru', '89001444913', '2000-02-25', 3);
 
 -- --------------------------------------------------------
 
@@ -78,9 +88,9 @@ CREATE TABLE `rooms` (
 INSERT INTO `rooms` (`id`, `name`, `desc_data`, `idhotel`) VALUES
 (1, 'room 1', 'some room', 1),
 (2, 'room 2', 'some room', 1),
-(3, 'room 3', 'some room', NULL),
-(4, 'room 4', 'some room', NULL),
-(5, 'room 5', 'some room', NULL),
+(3, 'room 3', 'some room', 1),
+(4, 'room 4', 'some room', 2),
+(5, 'room 5', 'some room', 2),
 (6, 'room 6', 'some room', 2);
 
 -- --------------------------------------------------------
@@ -146,7 +156,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `hotels`
