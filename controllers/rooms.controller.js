@@ -4,9 +4,6 @@ import { errorServerDB, notFound } from "../errors/errors.js";
 class Rooms {
     addRoom(req, res) {
 
-        console.log('>>> DECODE CONTROLLER', req.decode_body);
-        
-
         let { name, desc_data } = req.body;
 
         console.log(req.body);
@@ -25,8 +22,8 @@ class Rooms {
             return null;
         }
 
-        let fieldQuery = [name, desc_data, req.decode_body.userId];
-        let sqlQuery = "INSERT INTO rooms (name, desc_data, idhotel) VALUES (?, ?, (SELECT idhotel FROM users WHERE id = ?));";
+        let fieldQuery = [name, desc_data];
+        let sqlQuery = "INSERT INTO rooms (name, desc_data) VALUES (?, ?);";
         let funQuery = (errDB, resDB) => {
 
             console.log(">>> ERROR DB", errDB);
