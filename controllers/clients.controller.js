@@ -72,7 +72,7 @@ class Clients {
 
 
         let tmp = fiels.map((item, index) => {
-            return `${item} = ${values[index]}`
+            return `${item} = '${values[index]}'`
         }).join(", ");
 
         // создаём запрос
