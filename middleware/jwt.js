@@ -10,7 +10,7 @@ class JWTVer {
         let token = jwt.sign(
             { data: { username: usernameData, userId: userIdData } },
             process.env.SECRETKEY,
-            { expiresIn: "2d" });
+            { expiresIn: "4h" });
 
         return token;
 
