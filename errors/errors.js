@@ -8,7 +8,7 @@ export let invalid = (errKey, errMessage) => {
     return {
         message: "Validattion error",
         errors: {
-            errKey: errMessage
+            [errKey]: errMessage
         }
     }
 };
