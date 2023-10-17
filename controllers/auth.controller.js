@@ -45,6 +45,10 @@ class Auth {
         let sqlQuery = "SELECT * FROM users WHERE username = ? AND password = ?;";
         let funQuery = (errDB, resDB, fielsDB) => {
 
+            console.log('>> ERRDB', errDB);
+            console.log('>> RESDB', resDB);
+            
+
             if (errDB || resDB.length > 1) {
                 console.log(errDB);
                 res.status(500).json(errorServerDB);
@@ -56,12 +60,17 @@ class Auth {
                 res.json(
                     {
                         data: {
-                            token_user: `Beare ${jwt.create(resDB[0]["username"], resDB[0]["id"])}`
+                            token_user: `Bearer ${jwt.create(resDB[0]["username"], resDB[0]["id"])}`
                         }
                     }
                 )
             } else {
-                res.status(500).json()
+                res.status(401).json({
+                    message: "Unauthorized",
+                    errors: {
+                        login: "Invalid credentials"
+                    }
+                })
             }
         }
 
