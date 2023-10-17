@@ -9,7 +9,7 @@ class Auth {
         let { username, password } = req.body;
 
         // Проверка на наличие логина и пароля
-        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(401).json(data))) {
+        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -17,7 +17,12 @@ class Auth {
         let sqlQuery = "INSERT INTO users (username, password) VALUES (?, ?);";
         let funQuery = (errDB, resDB, fielsDB) => {
 
-            if (errDB) {
+            if (errDB && errDB.errno == 1062) {
+
+                res.status(403).json(invalid("duplicate", "Administrator already registered"));
+                return null;
+
+            } else if (errDB) {
                 console.log(errDB);
                 res.status(500).json(errorServerDB);
                 return null;
@@ -39,7 +44,7 @@ class Auth {
         let { username, password } = req.body;
 
         // Проверка на наличие логина и пароля
-        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(401).json(data))) {
+        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -50,12 +55,6 @@ class Auth {
 
             console.log('>> ERRDB', errDB);
             console.log('>> RESDB', resDB);
-
-
-            if (errDB && errDB.errno == 1062) {
-                res.status(403).json(invalid("duplicate", "Administrator already registered"));
-                return null;
-            }
 
             if (resDB.length > 0) {
                 console.log(resDB[0]);
