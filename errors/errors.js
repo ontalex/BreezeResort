@@ -39,3 +39,30 @@ export let errorServerDB = {
 };
 
 
+/**
+ * @param {Object} [req] Объект зпроса на валидацию
+ * @param {Array} [required] Массив названий обязательных полей для проверки (как в запросе)
+ * @param {Object} [res] Объект щаблона ответа клиенту
+ * @return {Object}
+ */
+export let validation = (req, required, res, callback) => {
+
+    let tmpRes = { ...res }; // временный объект с шаблоном ответа
+
+    required.forEach(element => {
+
+        // Сверем список обязательных полей и полученых
+        if (req[element] == null || req[element].trim() == "") {
+            tmpRes.errors[element] = [`The ${element} field is required.`]
+        }
+
+    });
+
+    if (Object.keys(tmpRes.errors).length > 0) {
+        callback(tmpRes);
+        return false;
+    }
+
+    return true;
+
+}

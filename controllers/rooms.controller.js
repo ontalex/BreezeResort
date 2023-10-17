@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB, notFound } from "../errors/errors.js";
+import { errorServerDB, notFound, validation } from "../errors/errors.js";
 
 class Rooms {
     addRoom(req, res) {
@@ -8,17 +8,8 @@ class Rooms {
 
         console.log(req.body);
 
-
-        if (!(name && desc_data)) {
-            res.status(401).json(
-                {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "name": ["The name field is required."],
-                        "desc_data": ["The description field is required."]
-                    }
-                }
-            )
+        // Проверка на наличие полей в запросе
+        if (!validation(req.body, ["name", "desc_data"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -51,7 +42,7 @@ class Rooms {
         let funQuery = (errDB, resDB) => {
 
             console.log(">>> ERROR DB", errDB);
-            
+
 
             if (errDB) {
                 console.log(errDB);
@@ -70,15 +61,8 @@ class Rooms {
     deleteRoom(req, res) {
         const { id } = req.params;
 
-        if (!id) {
-            res.status(401).json(
-                {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "id": ["The id_room field is required."]
-                    }
-                }
-            )
+        // Проверка на наличие полей в запросе
+        if (!validation(req.body, ["id"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -88,7 +72,7 @@ class Rooms {
 
             console.log('>> DB ERRR', errDB);
             console.log('>> DB RES', resDB);
-            
+
             if (errDB) {
                 console.log(errDB);
                 res.status(500).json(errorServerDB);
@@ -105,7 +89,7 @@ class Rooms {
             } else {
                 res.status(403).json(notFound);
             }
-            
+
         }
 
         db.query(sqlQuery, fieldQuery, funQuery);

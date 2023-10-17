@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { noneLoginOrPass, errorServerDB } from "../errors/errors.js";
+import { noneLoginOrPass, errorServerDB, invalid, validation } from "../errors/errors.js";
 import jwt from "../middleware/jwt.js";
 
 class Auth {
@@ -7,8 +7,9 @@ class Auth {
     signup(req, res) {
 
         let { username, password } = req.body;
-        if (!(username && password)) {
-            res.status(401).json(noneLoginOrPass);
+
+        // Проверка на наличие логина и пароля
+        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(401).json(data))) {
             return null;
         }
 
@@ -36,22 +37,23 @@ class Auth {
     async login(req, res) {
 
         let { username, password } = req.body;
-        if (!(username && password)) {
-            res.status(401).json(noneLoginOrPass);
+
+        // Проверка на наличие логина и пароля
+        if (!validation(req.body, ["username", "password"], { "message": "Invalid", "errors": {} }, (data) => res.status(401).json(data))) {
             return null;
         }
 
+        // формируем данные для запроса
         let fieldQuery = [username, password];
         let sqlQuery = "SELECT * FROM users WHERE username = ? AND password = ?;";
         let funQuery = (errDB, resDB, fielsDB) => {
 
             console.log('>> ERRDB', errDB);
             console.log('>> RESDB', resDB);
-            
 
-            if (errDB || resDB.length > 1) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+
+            if (errDB && errDB.errno == 1062) {
+                res.status(403).json(invalid("duplicate", "Administrator already registered"));
                 return null;
             }
 
