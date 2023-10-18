@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 16 2023 г., 15:45
+-- Время создания: Окт 18 2023 г., 07:46
 -- Версия сервера: 8.0.30
--- Версия PHP: 8.0.22
+-- Версия PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -110,7 +110,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'Ontalex', '123qwe');
+(1, 'Ontalex', '123qwe'),
+(2, 'lex', 'qweasd'),
+(6, 'VladBS', 'qweasd888');
 
 --
 -- Индексы сохранённых таблиц
@@ -146,7 +148,8 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
+  ADD UNIQUE KEY `id_UNIQUE` (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -174,7 +177,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

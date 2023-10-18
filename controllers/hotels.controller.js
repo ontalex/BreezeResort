@@ -1,20 +1,12 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound } from "../errors/errors.js";
+import { errorServerDB, invalid, notFound, validation } from "../errors/errors.js";
 
 class Hotels {
     addRoom(req, res) {
         let { name, number } = req.body;
 
-        if (isNaN(name) && isNaN(number)) {
-            res.status(401).json(
-                {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "name": ["The name field is required."],
-                        "number": ["The description field is required."]
-                    }
-                }
-            )
+        // Проверка на наличие плей в запросе
+        if (!validation(req.body, ["name", "number"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -69,6 +61,11 @@ class Hotels {
     deleteRoom(req, res) {
         let { id } = req.params;
 
+        // Проверка на наличие полей в запрсое
+        if (!validation(req.params, ["id"], { "message": "Invalid", "errors": {} }, (data) => res.status(403).json(data))) {
+            return null;
+        }
+
         let sqlQuery = "DELETE FROM hotels WHERE id = ?;";
         let fieldQuery = [id];
         let funQuery = (errDB, resDB) => {
@@ -91,16 +88,8 @@ class Hotels {
     mergeRoomInHotel(req, res) {
         let { id, idroom } = req.params;
 
-        if (isNaN(id) || isNaN(idroom)) {
-            res.status(401).json(
-                {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "id": ["The id field is required."],
-                        "idroom": ["The id room field is required."]
-                    }
-                }
-            )
+        // Проверка на наличие полей в запросе
+        if (!validation(req.params, ["id", "idroom"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(401).json(data))) {
             return null;
         }
 

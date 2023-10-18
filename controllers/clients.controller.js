@@ -8,19 +8,8 @@ class Clients {
 
         console.log(req.body);
 
-        if (Object.keys(req.body).length != Object.values(req.body).length) {
-            res.status(401).json(
-                {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "fio": ["The fio field is required"],
-                        "email": ["The email field is required"],
-                        "phone": ["The phone field is required"],
-                        "id_childdata": ["The id_childdata field is required"],
-                        "birth_date": ["The birth_date field is required"]
-                    }
-                }
-            )
+        // Проверка на наличие полей в запросе
+        if (!validation(req.body, ["fio", "email", "phone", "id_childdata", "birth_date"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -60,6 +49,11 @@ class Clients {
 
         // получаем id из паратмеров
         let client_id = req.params.id;
+
+        // Проверка на наличие полей в запросе
+        if (!validation(req.params, ["id"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
+            return null;
+        }
 
         // формируем список полей для измения
         let fiels = Object.keys(req.body);
@@ -108,6 +102,11 @@ class Clients {
         // получаем id из паратмеров
         let client_id = req.params.id;
 
+        // Проверка на наличие полей в запросе
+        if (!validation(req.params, ["id"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
+            return null;
+        }
+
         let sqlQuery = "DELETE FROM clients WHERE id = ?;";
         let funQuery = (errDB, resDB) => {
 
@@ -119,9 +118,11 @@ class Clients {
                 return null;
             }
 
+            console.log(resDB);
+            
 
             if (resDB.affectedRows == 1) {
-                res.status(204).json({
+                res.status(200).json({
                     data: {
                         message: "Deleted"
                     }
@@ -137,6 +138,11 @@ class Clients {
 
     patchRegisteredUser(req, res) {
         let { id, iduser } = req.params;
+
+        // Проверка на наличие полей в запросе
+        if (!validation(req.params, ["id", "iduser"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
+            return null;
+        }
 
         // создать параметры запроса
         let fieldQuery = [id, iduser];
