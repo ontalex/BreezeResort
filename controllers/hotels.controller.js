@@ -22,7 +22,6 @@ class Hotels {
                 return null;
 
             } else if (errDB) {
-
                 res.status(500).json(errorServerDB);
                 return null;
 
@@ -45,6 +44,7 @@ class Hotels {
         let sqlQuery = "SELECT name, number FROM hotels;";
         let funQuery = (errDB, resDB) => {
 
+            // Проверяем на пустой набор данных с БД
             if (resDB.length == 0) {
                 res.status(403).json(notFound);
                 return null;
@@ -73,10 +73,17 @@ class Hotels {
             console.log("\n\n>> RES DB", resDB, "<<<<");
             console.log("\n\n>> ERR DB", errDB, "<<<<");
 
+            // Проверяем на пустой набор данных с БД
             if (isNaN(id) || resDB) {
                 res.status(403).json(notFound);
                 return null;
             }
+
+            res.status(200).json({
+                data: {
+                    message: "Deleted"
+                }
+            })
 
 
         }
@@ -100,12 +107,14 @@ class Hotels {
             console.log(">>> ERROR DB", errDB);
             console.log(">>> RES DB", resDB);
 
+            // Обрабатываем другие ошибки
             if (errDB) {
                 console.log(errDB);
                 res.status(403).json(notFound);
                 return null;
             }
 
+            // Проверяем на пустой набор данных с БД
             if (resDB.affectedRows == 1) {
 
                 db.query(
@@ -127,6 +136,7 @@ class Hotels {
                 );
                 return null;
             } else {
+                
                 res.status(403).json(notFound);
                 return null;
             }
@@ -178,7 +188,7 @@ class Hotels {
 
                 }, []);
 
-                res.json(output);
+                res.status(200).json({data: output});
             }
 
         };
