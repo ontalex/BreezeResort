@@ -28,7 +28,7 @@ class JWTVer {
                     console.log("\n\n>>>> ERROR VERTOKEN <<<<", err);
                     console.log(err);
                     console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                    res.status(403).json(unauth);
+                    res.status(401).json(unauth);
                 } else {
                     console.log('\n\n>>> CHECKING TOKEN PROCESS - ACCESS');
                     next();
@@ -37,7 +37,7 @@ class JWTVer {
             });
 
         } catch (error) {
-            res.status(403).json(unauth);
+            res.status(401).json(unauth);
 
         }
     }
