@@ -62,7 +62,7 @@ class Rooms {
         const { id } = req.params;
 
         // Проверка на наличие полей в запросе
-        if (!validation(req.body, ["id"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
+        if (!validation(req.params, ["id"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
