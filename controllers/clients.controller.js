@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound } from "../errors/errors.js";
+import { errorServerDB, invalid, notFound, validation } from "../errors/errors.js";
 
 class Clients {
 
@@ -9,11 +9,9 @@ class Clients {
         console.log(req.body);
 
         // Проверка на наличие полей в запросе
-        if (!validation(req.body, ["fio", "email", "phone", "id_childdata", "birth_date"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
+        if (!validation(req.body, ["fio", "email", "phone", "id_childata", "birth_date"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
-
-
 
         let fieldQuery = [fio, email, phone, id_childata, birth_date];
         let sqlQuery = "INSERT INTO clients (fio, email, phone, id_childata, birth_date) VALUES (?, ?, ?, ?, ?);";
@@ -76,13 +74,18 @@ class Clients {
             console.log(">>> ERROR DB", errDB);
             console.log('>>> RES DB', resDB);
 
-
             if (errDB) {
                 console.log(errDB);
                 res.status(500).json(errorServerDB);
                 return null;
             }
 
+            console.log(resDB);
+
+            if(resDB.affectedRows == 0) {
+                res.status(403).json(notFound);
+                return null;
+            }           
 
             res.json({
                 data: {
@@ -195,7 +198,7 @@ class Clients {
                     return acc;
                 }, {})).map(([name, data]) => (data));
 
-                res.json(output);
+                res.json({data: output});
             }
 
         }
