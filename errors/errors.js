@@ -12,15 +12,6 @@ export let invalid = (errKey, errMessage) => {
         }
     }
 };
-
-export let noneLoginOrPass = {
-    message: 'The given data was invalid.',
-    errors: {
-        username: ["The username field is required."],
-        password: ["The password field is required."]
-    }
-};
-
 export let login401 = {
     message: 'Unauthorized',
     errors: {
@@ -52,7 +43,7 @@ export let validation = (req, required, res, callback) => {
     required.forEach(element => {
 
         // Сверем список обязательных полей и полученых
-        if (req[element] == null || req[element].trim() == "") {
+        if (req[element] == null || req[element].toString().trim() == "") {
             tmpRes.errors[element] = [`The ${element} field is required.`]
         }
 

@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { noneLoginOrPass, errorServerDB, invalid, validation } from "../errors/errors.js";
+import { errorServerDB, invalid, validation } from "../errors/errors.js";
 import jwt from "../middleware/jwt.js";
 
 class Auth {
