@@ -6,7 +6,7 @@ class Hotels {
         let { name, number } = req.body;
 
         // Проверка на наличие плей в запросе
-        if (!validation(req.body, ["name", "number"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(401).json(data))) {
+        if (!validation(req.body, ["name", "number"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
@@ -62,7 +62,7 @@ class Hotels {
         let { id } = req.params;
 
         // Проверка на наличие полей в запрсое
-        if (!validation(req.params, ["id"], { "message": "Invalid", "errors": {} }, (data) => res.status(401).json(data))) {
+        if (!validation(req.params, ["id"], { "message": "Invalid", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
