@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 17 2023 г., 13:47
+-- Время создания: Окт 18 2023 г., 07:46
 -- Версия сервера: 8.0.30
--- Версия PHP: 8.0.22
+-- Версия PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,7 +41,10 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `fio`, `email`, `phone`, `birth_date`, `id_childata`) VALUES
-(12, 'Pwetrovg Olegovich', 'g7g6ash@wsr.ru', '89g0301234540', '2000-02-20', 10);
+(1, 'Maxim Petrov Olegovich', 'grach@wsr.ru', '89001234510', '2000-02-20', 2),
+(3, 'Alex Petrov Olegovich', 'ontaelx@wsr.ru', '89001444510', '2000-02-20', 2),
+(4, 'Grach Petrov Olegovich', 'grac@wsr.ru', '89001444910', '2000-02-20', 3),
+(5, 'Liza Petrova Olegovna', 'lizaPO@wsr.ru', '89001444913', '2000-02-25', 3);
 
 -- --------------------------------------------------------
 
@@ -60,9 +63,10 @@ CREATE TABLE `hotels` (
 --
 
 INSERT INTO `hotels` (`id`, `name`, `number`) VALUES
+(1, 'Главный-Север', 100),
+(2, 'Главный-Юг', 200),
 (3, 'Омск-1', 300),
-(4, 'Омск-2', 301),
-(5, 'Название 9', 34);
+(4, 'Омск-2', 301);
 
 -- --------------------------------------------------------
 
@@ -82,11 +86,12 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `name`, `desc_data`, `idhotel`) VALUES
-(7, 'room 0', 'desc', 4),
-(8, 'room 0', 'desc', NULL),
-(9, 'room 0', 'desc', NULL),
-(10, 'room 0', 'desc', 4),
-(11, 'room 10', 'desc', NULL);
+(1, 'room 1', 'some room', 1),
+(2, 'room 2', 'some room', 1),
+(3, 'room 3', 'some room', 1),
+(4, 'room 4', 'some room', 2),
+(5, 'room 5', 'some room', 2),
+(6, 'room 6', 'some room', 2);
 
 -- --------------------------------------------------------
 
@@ -106,7 +111,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (1, 'Ontalex', '123qwe'),
-(2, 'lex', 'qweasd');
+(2, 'lex', 'qweasd'),
+(6, 'VladBS', 'qweasd888');
 
 --
 -- Индексы сохранённых таблиц
@@ -153,25 +159,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
