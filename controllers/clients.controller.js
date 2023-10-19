@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound } from "../errors/errors.js";
+import { invalid, notFound } from "../errors/errors.js";
 import { valid_object, validation } from "../errors/validations.js";
 
 class Clients {
@@ -35,7 +35,7 @@ class Clients {
                 return null;
             } else if (errDB) {
                 console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(invalid(["birth_date"], ["Invalid date value"]));
                 return null;
             }
 
@@ -59,6 +59,11 @@ class Clients {
             return null;
         }
 
+        // Валидация данных
+        if (!valid_object(req, (data) => res.status(403).json(data))) {
+            return null
+        }
+
         // формируем список полей для измения
         let fiels = Object.keys(req.body);
 
@@ -80,12 +85,6 @@ class Clients {
             console.log(">>> ERROR DB", errDB);
             console.log('>>> RES DB', resDB);
 
-            if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
-                return null;
-            }
-
             console.log(resDB);
 
             if (resDB.affectedRows == 0) {
@@ -100,8 +99,6 @@ class Clients {
                 }
             });
         }
-
-        console.log(sqlQuery);
 
         db.query(sqlQuery, [client_id], funQuery);
 
@@ -123,13 +120,11 @@ class Clients {
             console.log(">>> ERROR DB", errDB);
 
             if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
             }
 
             console.log(resDB);
-
 
             if (resDB.affectedRows == 1) {
                 res.status(200).json({

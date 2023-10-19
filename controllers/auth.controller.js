@@ -17,7 +17,7 @@ class Auth {
         // формируем данные для запроса
         let fieldQuery = [username, password];
         let sqlQuery = "INSERT INTO users (username, password) VALUES (?, ?);";
-        let funQuery = (errDB, resDB, fielsDB) => {
+        let funQuery = (errDB, resDB) => {
 
             // Проверка на дубликаты данных в БД
             if (errDB && errDB.errno == 1062) {
@@ -25,10 +25,6 @@ class Auth {
                 res.status(403).json(invalid(["duplicate"], ["Administrator already registered"]));
                 return null;
 
-            } else if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
-                return null;
             }
 
             res.json({
@@ -54,7 +50,7 @@ class Auth {
         // формируем данные для запроса
         let fieldQuery = [username, password];
         let sqlQuery = "SELECT * FROM users WHERE username = ? AND password = ?;";
-        let funQuery = (errDB, resDB, fielsDB) => {
+        let funQuery = (errDB, resDB) => {
 
             console.log('>> ERRDB', errDB);
             console.log('>> RESDB', resDB);

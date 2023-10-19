@@ -11,6 +11,7 @@ let regex_client = {
  * 
  * @param {Express.Request} req Объект запроса для валидации
  * @param {Function} callback Функция выполняема в случае не валидности
+ * @description Проверяем значения тела заапроса на валидность
  */
 export let valid_object = (req, callback) => {
 
