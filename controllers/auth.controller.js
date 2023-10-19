@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, invalid, validation } from "../errors/errors.js";
+import { errorServerDB, invalid } from "../errors/errors.js";
+import { validation } from "../errors/validations.js";
 import jwt from "../middleware/jwt.js";
 
 class Auth {
@@ -21,7 +22,7 @@ class Auth {
             // Проверка на дубликаты данных в БД
             if (errDB && errDB.errno == 1062) {
 
-                res.status(403).json(invalid("duplicate", "Administrator already registered"));
+                res.status(403).json(invalid(["duplicate"], ["Administrator already registered"]));
                 return null;
 
             } else if (errDB) {

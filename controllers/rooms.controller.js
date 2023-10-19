@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, notFound, validation } from "../errors/errors.js";
+import { errorServerDB, notFound } from "../errors/errors.js";
+import { validation } from "../errors/validations.js";
 
 class Rooms {
     addRoom(req, res) {

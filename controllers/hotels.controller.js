@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound, validation } from "../errors/errors.js";
+import { errorServerDB, invalid, notFound } from "../errors/errors.js";
+import { validation } from "../errors/validations.js";
 
 class Hotels {
     addRoom(req, res) {
@@ -18,7 +19,7 @@ class Hotels {
 
             if (errDB && errDB.errno == 1062) {
 
-                res.status(403).json(invalid("duplicate", "Hotel already registered"));
+                res.status(403).json(invalid(["duplicate"], ["Hotel already registered"]));
                 return null;
 
             } else if (errDB) {
