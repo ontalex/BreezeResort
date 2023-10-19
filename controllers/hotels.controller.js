@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound, validation } from "../errors/errors.js";
+import { invalid, notFound } from "../errors/errors.js";
+import { validation } from "../errors/validations.js";
 
 class Hotels {
     addRoom(req, res) {
@@ -10,19 +11,19 @@ class Hotels {
             return null;
         }
 
+        // Формируем данные для запроса
         let sqlQuery = "INSERT INTO hotels (name, number) VALUES (?, ?);";
         let fieldQuery = [name, number];
         let funQuery = (errDB, resDB) => {
+
             console.log("\n\n>> RES DB", resDB, "<<<<");
             console.log("\n\n>> ERR DB", errDB, "<<<<");
 
             if (errDB && errDB.errno == 1062) {
-
-                res.status(403).json(invalid("duplicate", "Hotel already registered"));
+                res.status(403).json(invalid(["duplicate"], ["Hotel already registered"]));
                 return null;
-
             } else if (errDB) {
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
 
             }
@@ -110,7 +111,6 @@ class Hotels {
 
             // Обрабатываем другие ошибки
             if (errDB) {
-                console.log(errDB);
                 res.status(403).json(notFound);
                 return null;
             }

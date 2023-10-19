@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, invalid, notFound, validation } from "../errors/errors.js";
+import { invalid, notFound } from "../errors/errors.js";
+import { valid_object, validation } from "../errors/validations.js";
 
 class Clients {
 
@@ -11,6 +12,11 @@ class Clients {
         // Проверка на наличие полей в запросе
         if (!validation(req.body, ["fio", "email", "phone", "id_childata", "birth_date"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
+        }
+
+        // Валидация данных
+        if (!valid_object(req, (data) => res.status(403).json(data))) {
+            return null
         }
 
         let fieldQuery = [fio, email, phone, id_childata, birth_date];
@@ -25,11 +31,11 @@ class Clients {
                 return null;
             } else if (errDB && errDB.errno == 1062) {
                 console.log(errDB);
-                res.status(403).json(invalid("duplicate", "Client already registered"));
+                res.status(403).json(invalid(["duplicate"], ["Client already registered"]));
                 return null;
             } else if (errDB) {
                 console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(invalid(["birth_date"], ["Invalid date value"]));
                 return null;
             }
 
@@ -53,6 +59,11 @@ class Clients {
             return null;
         }
 
+        // Валидация данных
+        if (!valid_object(req, (data) => res.status(403).json(data))) {
+            return null
+        }
+
         // формируем список полей для измения
         let fiels = Object.keys(req.body);
 
@@ -74,18 +85,12 @@ class Clients {
             console.log(">>> ERROR DB", errDB);
             console.log('>>> RES DB', resDB);
 
-            if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
-                return null;
-            }
-
             console.log(resDB);
 
-            if(resDB.affectedRows == 0) {
+            if (resDB.affectedRows == 0) {
                 res.status(403).json(notFound);
                 return null;
-            }           
+            }
 
             res.json({
                 data: {
@@ -94,8 +99,6 @@ class Clients {
                 }
             });
         }
-
-        console.log(sqlQuery);
 
         db.query(sqlQuery, [client_id], funQuery);
 
@@ -117,13 +120,11 @@ class Clients {
             console.log(">>> ERROR DB", errDB);
 
             if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
             }
 
             console.log(resDB);
-            
 
             if (resDB.affectedRows == 1) {
                 res.status(200).json({
@@ -193,7 +194,7 @@ class Clients {
                 res.status(403).json(notFound);
                 return null;
             } else {
-                
+
                 const output = Object.entries(resDB.reduce((acc, item) => {
                     const { name, ...rest } = item;
                     acc[name] = acc[name] || { name: name, data: [] };
@@ -201,7 +202,7 @@ class Clients {
                     return acc;
                 }, {})).map(([name, data]) => (data));
 
-                res.json({data: output});
+                res.json({ data: output });
             }
 
         }

@@ -1,5 +1,6 @@
 import db from "../db.js";
-import { errorServerDB, notFound, validation } from "../errors/errors.js";
+import { notFound } from "../errors/errors.js";
+import { validation } from "../errors/validations.js";
 
 class Rooms {
     addRoom(req, res) {
@@ -21,8 +22,7 @@ class Rooms {
             console.log(">>> ERROR DB", errDB);
 
             if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
             }
 
@@ -45,10 +45,8 @@ class Rooms {
 
             console.log(">>> ERROR DB", errDB);
 
-
             if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
             }
 
@@ -77,11 +75,9 @@ class Rooms {
             console.log('>> DB RES', resDB);
 
             if (errDB) {
-                console.log(errDB);
-                res.status(500).json(errorServerDB);
+                res.status(403).json(notFound);
                 return null;
             }
-
 
             if (resDB.affectedRows == 1) {
                 res.status(200).json({
