@@ -1,5 +1,5 @@
 /**
- * @description Шаблон ответа "Пользователь не  "
+ * @description Шаблон ответа "Пользователь не найден"
  */
 export let unauth = {
     error: {

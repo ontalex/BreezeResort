@@ -59,7 +59,7 @@ class Hotels {
         db.query(sqlQuery, funQuery);
     }
 
-    deleteRoom(req, res) {
+    deleteHotel(req, res) {
         let { id } = req.params;
 
         // Проверка на наличие полей в запрсое
@@ -74,8 +74,7 @@ class Hotels {
             console.log("\n\n>> RES DB", resDB, "<<<<");
             console.log("\n\n>> ERR DB", errDB, "<<<<");
 
-            // Проверяем на пустой набор данных с БД
-            if (isNaN(id) || resDB) {
+            if(resDB.affectedRows == 0) {
                 res.status(403).json(notFound);
                 return null;
             }

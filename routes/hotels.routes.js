@@ -6,7 +6,7 @@ const hotels = Router();
 
 hotels.post("/hotel", jwt.check, hotelsController.addRoom);
 hotels.get("/hotels", jwt.check, hotelsController.getAllRooms);
-hotels.delete("/hotel/:id", jwt.check, hotelsController.deleteRoom);
+hotels.delete("/hotel/:id", jwt.check, hotelsController.deleteHotel);
 hotels.get("/hotel/:id/room/:idroom", jwt.check, hotelsController.mergeRoomInHotel);
 hotels.get("/roomsinhotels", jwt.check, hotelsController.getRoomsInHotels);
 

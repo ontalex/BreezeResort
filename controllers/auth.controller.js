@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { errorServerDB, invalid } from "../errors/errors.js";
+import { invalid } from "../errors/errors.js";
 import { validation } from "../errors/validations.js";
 import jwt from "../middleware/jwt.js";
 
