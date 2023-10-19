@@ -14,21 +14,29 @@ let regex_client = {
  */
 export let valid_object = (req, callback) => {
 
+    console.log("\n>> START VALIDATION\n");
+
     let hasErrors = false;
 
+    // Создаём шаблон ответа
     let template = {
         message: "Validattion error",
         errors: {}
     }
 
+    // Проверяем каждое поле
     for (const [key, value] of Object.entries(req.body)) {
         let isValid = new RegExp(regex_client[key]).test(value);
+
+        console.log(">> VALID CHECK >> ", isValid);
 
         if(!isValid) {
             hasErrors = true;
             template.errors[key] = `The ${key} is invalid`;
         }
     }
+
+    console.log("\n>> END VALIDATION\n");
 
     if(hasErrors) {
         callback(template);

@@ -9,13 +9,12 @@ class Clients {
 
         console.log(req.body);
 
-        valid_object(req)
-
         // Проверка на наличие полей в запросе
         if (!validation(req.body, ["fio", "email", "phone", "id_childata", "birth_date"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(403).json(data))) {
             return null;
         }
 
+        // Валидация данных
         if (!valid_object(req, (data) => res.status(403).json(data))) {
             return null
         }
