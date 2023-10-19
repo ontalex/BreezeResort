@@ -99,7 +99,8 @@ class Hotels {
         if (!validation(req.params, ["id", "idroom"], { "message": "The given data was invalid.", "errors": {} }, (data) => res.status(401).json(data))) {
             return null;
         }
-
+        
+        // формируем данные для запроса
         let fieldQuery = [id, idroom];
         let sqlQuery = "UPDATE rooms SET idhotel = ? WHERE id = ?;";
         let funQuery = (errDB, resDB) => {
@@ -147,6 +148,7 @@ class Hotels {
     }
 
     getRoomsInHotels(req, res) {
+        // формируем данные для запроса
         let sqlQuery = 'SELECT  hotels.name as title, hotels.number, rooms.name, clients.fio, clients.phone as phonenumber  FROM hotels  LEFT JOIN rooms ON hotels.id = rooms.idhotel  LEFT JOIN clients ON rooms.id = clients.id_childata;';
         let funQuery = (errDB, resDB) => {
 
@@ -161,6 +163,7 @@ class Hotels {
                 return null;
             } else {
 
+                // Проходимся по матрице для формирования первого уровня отчёта
                 const output = Object.entries(resDB.reduce((acc, item) => {
                     const { title, number, ...rest } = item;
 
@@ -170,6 +173,7 @@ class Hotels {
                     return acc;
                 }, {})).map(([title, data_children]) => {
 
+                    // Проходим по второму уровню 
                     let outputNext = Object.entries(data_children["data_children"].reduce((accNext, itemNext) => {
                         const { name, ...restNext } = itemNext;
 
@@ -184,6 +188,7 @@ class Hotels {
                         return accNext;
                     }, {})).map(([name, userdata]) => (userdata));
 
+                    // Возврат весь объект данных
                     return { title: data_children.title, number: data_children.number, data_children: outputNext };
 
                 }, []);

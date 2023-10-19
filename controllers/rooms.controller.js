@@ -13,6 +13,7 @@ class Rooms {
             return null;
         }
 
+        // формируем данные для запроса
         let fieldQuery = [name, desc_data];
         let sqlQuery = "INSERT INTO rooms (name, desc_data) VALUES (?, ?);";
         let funQuery = (errDB, resDB) => {
@@ -38,6 +39,7 @@ class Rooms {
 
     getRooms(req, res) {
 
+        // формируем данные для запроса
         let sqlQuery = "SELECT id, name, desc_data FROM rooms;";
         let funQuery = (errDB, resDB) => {
 
@@ -66,6 +68,7 @@ class Rooms {
             return null;
         }
 
+        // формируем данные для запроса
         let fieldQuery = [id];
         let sqlQuery = "DELETE FROM rooms WHERE id = ?;";
         let funQuery = (errDB, resDB) => {

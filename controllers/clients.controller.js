@@ -110,6 +110,7 @@ class Clients {
             return null;
         }
 
+        // формируем данные для запроса
         let sqlQuery = "DELETE FROM clients WHERE id = ?;";
         let funQuery = (errDB, resDB) => {
 
@@ -177,6 +178,7 @@ class Clients {
     }
 
     getAllInRoom(req, res) {
+        // формируем данные для запроса
         let sqlQuery = "SELECT rooms.name, clients.fio, clients.phone as phonenamber FROM rooms JOIN clients ON rooms.id = clients.id_childata;";
         let funQuery = (errDB, resDB) => {
 
@@ -186,6 +188,7 @@ class Clients {
                 return null;
             }
 
+            // Проверяем внесли мы данные или нет
             if (resDB.length == 0) {
                 res.status(403).json(notFound);
                 return null;

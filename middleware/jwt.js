@@ -23,6 +23,7 @@ class JWTVer {
 
             let token = req.headers.authorization.split(' ')[1];
 
+            // Проверяем токен
             jwt.verify(token, process.env.SECRETKEY, (err, decod) => {
                 if (err) {
                     console.log("\n\n>>>> ERROR VERTOKEN <<<<", err);

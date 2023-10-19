@@ -8,6 +8,7 @@ import hotels from './routes/hotels.routes.js';
 
 dotenv.config();
 
+// Конфигурация для модуля CORS
 let corsConfig = {
     origin: "*"
 };
@@ -18,6 +19,7 @@ app.use(exp.json());
 
 app.use("/api", cors(corsConfig), [auth, rooms, clients, hotels]);
 
+// Создаём слушатель сервера
 app.listen(process.env.SERVER_PORT || 8080, (err) => {
     if (err) {
         console.log(">>> SERVER ERROR <<<")

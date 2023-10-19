@@ -34,7 +34,8 @@ export let errorServerDB = {
  * @param {Object} [req] Объект зпроса на валидацию
  * @param {Array} [required] Массив названий обязательных полей для проверки (как в запросе)
  * @param {Object} [res] Объект щаблона ответа клиенту
- * @return {Object}
+ * @return {Boolean} Правлиьный объект или нет
+ * @description Функция валидации обхектов по наличию ключей и значеним (если данные и не пустое ли значение)
  */
 export let validation = (req, required, res, callback) => {
 
@@ -49,6 +50,7 @@ export let validation = (req, required, res, callback) => {
 
     });
 
+    // Проверка на наличие ошибок
     if (Object.keys(tmpRes.errors).length > 0) {
         callback(tmpRes);
         return false;

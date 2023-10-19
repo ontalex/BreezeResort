@@ -13,10 +13,12 @@ class Auth {
             return null;
         }
 
+        // формируем данные для запроса
         let fieldQuery = [username, password];
         let sqlQuery = "INSERT INTO users (username, password) VALUES (?, ?);";
         let funQuery = (errDB, resDB, fielsDB) => {
 
+            // Проверка на дубликаты данных в БД
             if (errDB && errDB.errno == 1062) {
 
                 res.status(403).json(invalid("duplicate", "Administrator already registered"));
